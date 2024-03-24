@@ -19,6 +19,7 @@ from Function import *
 import tempfile, os
 import datetime
 import time
+import serial
 #======python的函數庫==========
 
 app = Flask(__name__)
@@ -67,9 +68,18 @@ def handle_message(event):
     elif '功能列表' in msg:
         message = function_list()
         line_bot_api.reply_message(event.reply_token, message)
+
     else:
+        port = 'COM3'
+        baudrate = 9600
         message = TextSendMessage(text=msg)
-        line_bot_api.reply_message(event.reply_token, message)
+        ser = serial.Serial(port, baudrate,timeout=1)
+        def send_to_arduino(message):
+    # 將訊息轉為位元組並傳送到 Arduino
+            ser.write(message.encode())
+            send_to_arduino(message)
+            ser.close()
+
 
 @handler.add(PostbackEvent)
 def handle_message(event):
