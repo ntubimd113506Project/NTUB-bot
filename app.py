@@ -65,7 +65,7 @@ def callback():
 #         message = function_list()
 #         line_bot_api.reply_message(event.reply_token, message)
 
-serial_port = '/COM3'  # 請根據你的系統及 Arduino 連接埠進行調整
+serial_port = 'COM3'  # 請根據你的系統及 Arduino 連接埠進行調整
 baudrate = 9600
 ser = serial.Serial(serial_port, baudrate, timeout=1)
 def handle_message(event):
