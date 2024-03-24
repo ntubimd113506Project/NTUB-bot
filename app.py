@@ -29,17 +29,39 @@ line_bot_api = LineBotApi('vzDtwf8h7fEZRRmzj4VimopZL0+T1YKif982hzSdorxlLoebj3pj/
 # Channel Secret
 handler = WebhookHandler('1d16422c3b78ca6b26335a808c5258b2')
 
-
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
+    payload = request.json
     body = request.get_data(as_text=True)
+    if payload['events'][0]['type'] == 'message':
+        # 提取訊息內容
+        message = payload['events'][0]['message']['text']
+        a=message
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
     return 'OK'
+
+serial_port = 'COM3'  # 請根據你的系統及 Arduino 連接埠進行調整
+baudrate = 9600
+ser = serial.Serial(serial_port, baudrate, timeout=1)
+# def handle_message(event):
+#     # 接收使用者傳送的訊息
+#     user_message = event.message.text
+    
+#     # 回傳相同的訊息給使用者
+#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_message))
+    
+#     # 將訊息傳送到 Arduino 顯示
+#     send_to_arduino(user_message)
+
+# 將訊息傳送到 Arduino 的函式
+def send_to_arduino(a):
+    # 將訊息轉為位元組並傳送到 Arduino
+    ser.write(a.encode())
 
 
 # 處理訊息
@@ -64,24 +86,6 @@ def callback():
 #     elif '功能列表' in msg:
 #         message = function_list()
 #         line_bot_api.reply_message(event.reply_token, message)
-
-serial_port = 'COM3'  # 請根據你的系統及 Arduino 連接埠進行調整
-baudrate = 9600
-ser = serial.Serial(serial_port, baudrate, timeout=1)
-def handle_message(event):
-    # 接收使用者傳送的訊息
-    user_message = event.message.text
-    
-    # 回傳相同的訊息給使用者
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_message))
-    
-    # 將訊息傳送到 Arduino 顯示
-    send_to_arduino(user_message)
-
-# 將訊息傳送到 Arduino 的函式
-def send_to_arduino(message):
-    # 將訊息轉為位元組並傳送到 Arduino
-    ser.write(message.encode())
 
 
 # @handler.add(PostbackEvent)
