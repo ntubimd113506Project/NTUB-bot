@@ -68,17 +68,20 @@ def callback():
 serial_port = '/COM3'  # 請根據你的系統及 Arduino 連接埠進行調整
 baudrate = 9600
 ser = serial.Serial(serial_port, baudrate, timeout=1)
-def display_on_lcd(message):
+def handle_message(event):
+    # 接收使用者傳送的訊息
+    user_message = event.message.text
+    
+    # 回傳相同的訊息給使用者
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_message))
+    
+    # 將訊息傳送到 Arduino 顯示
+    send_to_arduino(user_message)
+
+# 將訊息傳送到 Arduino 的函式
+def send_to_arduino(message):
     # 將訊息轉為位元組並傳送到 Arduino
     ser.write(message.encode())
-    # 延遲一段時間以確保 Arduino 正確接收並處理訊息
-    time.sleep(1)
-
-# LINE Bot 接收訊息的處理函式
-def handle_message(event):
-    message = event.message.text
-    # 顯示訊息在 Arduino LCD 上
-    display_on_lcd(message)
 
 
 # @handler.add(PostbackEvent)
