@@ -23,7 +23,7 @@ import serial
 #======python的函數庫==========
 
 app = Flask(__name__)
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+# static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 # Channel Access Token
 line_bot_api = LineBotApi('vzDtwf8h7fEZRRmzj4VimopZL0+T1YKif982hzSdorxlLoebj3pj/4FwFipwinhCz87gKYDRvwvWmsU5FJ+0LOhywd+LFkFSopjeArMGhyoDtH823BhMCOUxc0WVSPIfuDwNWbLCemZtEz88kCJhSQdB04t89/1O/w1cDnyilFU=')
 # Channel Secret
