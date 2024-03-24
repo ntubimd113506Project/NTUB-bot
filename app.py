@@ -70,15 +70,20 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, message)
 
     else:
-        port = 'COM3'
+        serial_port = '/COM3'  # 請根據你的系統及 Arduino 連接埠進行調整
         baudrate = 9600
-        message = TextSendMessage(text=msg)
-        ser = serial.Serial(port, baudrate,timeout=1)
-        def send_to_arduino(message):
+        ser = serial.Serial(serial_port, baudrate, timeout=1)
+        def display_on_lcd(message):
     # 將訊息轉為位元組並傳送到 Arduino
             ser.write(message.encode())
-            send_to_arduino(message)
-            ser.close()
+    # 延遲一段時間以確保 Arduino 正確接收並處理訊息
+            time.sleep(1)
+
+# LINE Bot 接收訊息的處理函式
+        def handle_message(event):
+            message = event.message.text
+    # 顯示訊息在 Arduino LCD 上
+            display_on_lcd(message)
 
 
 @handler.add(PostbackEvent)
